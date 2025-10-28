@@ -1,0 +1,53 @@
+
+<div class="flex flex-col space-y-4">
+  <!-- Input Form -->
+  <div class="flex items-center space-x-2">
+    <input
+      [(ngModel)]="prompt"
+      type="text"
+      placeholder="e.g., 'A lone hiker on a mountain at sunrise'"
+      class="flex-1 bg-secondary border border-border rounded-md px-3 py-2 text-text-primary focus:ring-2 focus:ring-primary focus:outline-none"
+    />
+    <button
+      (click)="generateImage()"
+      [disabled]="isLoading() || !prompt().trim()"
+      class="px-4 py-2 bg-primary text-white rounded-md font-semibold hover:bg-primary-hover disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-primary focus:outline-none">
+      Generate
+    </button>
+  </div>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="p-3 border border-red-500/50 bg-red-500/10 rounded-md text-red-400 text-sm">
+      <p><strong>Error:</strong> {{ error() }}</p>
+    </div>
+  }
+
+  <!-- Image Display Area -->
+  <div class="w-full aspect-video bg-secondary border-2 border-dashed border-border rounded-lg flex items-center justify-center overflow-hidden">
+    @if (isLoading()) {
+      <div class="flex flex-col items-center justify-center text-text-secondary">
+        <svg class="animate-spin h-8 w-8 text-primary mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-sm">Generating your visual...</p>
+      </div>
+    } @else if (imageUrl()) {
+      <img [src]="imageUrl()" alt="Generated image for the campaign" class="object-cover w-full h-full" />
+    } @else {
+      <div class="text-center text-text-secondary p-4">
+        <svg class="mx-auto h-12 w-12 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+        </svg>
+        <p class="mt-2 text-sm">Your generated image will appear here.</p>
+      </div>
+    }
+  </div>
+
+  @if (imageUrl()) {
+    <a [href]="imageUrl()" download="campaign-visual.png" class="w-full text-center px-4 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-green-500 focus:outline-none">
+      Download Image
+    </a>
+  }
+</div>

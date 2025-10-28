@@ -1,0 +1,71 @@
+<div class="min-h-screen flex flex-col bg-background text-foreground">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-border backdrop-blur-sm bg-background/80">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-blue to-accent flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-white"><path d="M17 14a5 5 0 0 0-10 0c0 4.38 5 8 5 8s5-3.62 5-8Z"></path></svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-white">FALCONI</h1>
+            <p class="text-xs text-foreground/60">Digital Catalog & AI Suite</p>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation Tabs -->
+      <nav class="mt-4">
+        <div class="flex border-b border-border">
+          <button (click)="setActiveView('catalog')" 
+                  class="px-4 py-2 text-sm font-medium transition-colors"
+                  [class]="activeView() === 'catalog' ? 'border-b-2 border-accent text-accent' : 'text-foreground/70 hover:text-white'">
+            Product Catalog
+          </button>
+          <button (click)="setActiveView('ai_suite')" 
+                  class="px-4 py-2 text-sm font-medium transition-colors"
+                  [class]="activeView() === 'ai_suite' ? 'border-b-2 border-accent text-accent' : 'text-foreground/70 hover:text-white'">
+            AI Marketing Suite
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    @if (activeView() === 'catalog') {
+      <app-products></app-products>
+    }
+    @if (activeView() === 'ai_suite') {
+      <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <div class="mb-12 text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">AI Marketing Suite</h2>
+            <p class="text-lg text-foreground/80 max-w-2xl mx-auto">
+              Leverage the power of Gemini to create marketing content and visuals for your products.
+            </p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div class="flex flex-col gap-8">
+            <div class="bg-card rounded-xl shadow-lg p-6 border border-border">
+              <h3 class="text-xl font-semibold text-white mb-1">Marketing Content Assistant</h3>
+              <p class="text-foreground/70 mb-4 text-sm">Generate ad copy, social media posts, and sales pitches for Falconi products.</p>
+              <app-chat></app-chat>
+            </div>
+             <div class="bg-card rounded-xl shadow-lg p-6 border border-border">
+              <h3 class="text-xl font-semibold text-white mb-1">AI Image Editor</h3>
+              <p class="text-foreground/70 mb-4 text-sm">Upload an image and use a text prompt to edit it.</p>
+              <app-image-editor></app-image-editor>
+            </div>
+          </div>
+          <div class="flex flex-col gap-8 lg:sticky lg:top-28">
+            <div class="bg-card rounded-xl shadow-lg p-6 border border-border">
+              <h3 class="text-xl font-semibold text-white mb-1">AI Image Generator</h3>
+              <p class="text-foreground/70 mb-4 text-sm">Generate a unique image to accompany your marketing efforts. Describe the visual you want.</p>
+              <app-image-generator></app-image-generator>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+</div>

@@ -1,0 +1,63 @@
+
+<div class="flex flex-col h-[60vh] bg-secondary rounded-lg border border-border">
+  <!-- Chat messages -->
+  <div #chatContainer class="flex-1 overflow-y-auto p-4 space-y-4">
+    @for (message of messages(); track $index) {
+      <div class="flex" [class.justify-end]="message.role === 'user'">
+        <div 
+          class="max-w-xs md:max-w-md lg:max-w-lg rounded-xl px-4 py-2"
+          [class.bg-primary]="message.role === 'user'"
+          [class.text-white]="message.role === 'user'"
+          [class.bg-card]="message.role === 'model'"
+          [class.text-text-primary]="message.role === 'model'">
+          <div class="prose prose-invert prose-sm" [innerHTML]="formatMessage(message.parts[0].text)"></div>
+        </div>
+      </div>
+    }
+    @if (isLoading() && messages()[messages().length - 1]?.parts[0]?.text === '') {
+        <div class="flex">
+            <div class="max-w-xs md:max-w-md lg:max-w-lg rounded-xl px-4 py-2 bg-card text-text-primary">
+                <div class="flex items-center space-x-2">
+                    <span class="h-2 w-2 bg-text-secondary rounded-full animate-pulse [animation-delay:-0.3s]"></span>
+                    <span class="h-2 w-2 bg-text-secondary rounded-full animate-pulse [animation-delay:-0.15s]"></span>
+                    <span class="h-2 w-2 bg-text-secondary rounded-full animate-pulse"></span>
+                </div>
+            </div>
+        </div>
+    }
+  </div>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="p-4 border-t border-border text-red-400 text-sm">
+      <p><strong>Error:</strong> {{ error() }}</p>
+    </div>
+  }
+
+  <!-- Chat input -->
+  <div class="p-4 border-t border-border bg-secondary rounded-b-lg">
+    <div class="flex items-center space-x-2">
+      <textarea
+        #input
+        [(ngModel)]="userInput"
+        (keydown)="handleEnterPress($event)"
+        placeholder="e.g., 'A flash sale on summer hiking gear'"
+        class="flex-1 bg-card border border-border rounded-md px-3 py-2 text-text-primary focus:ring-2 focus:ring-primary focus:outline-none resize-none"
+        rows="1"
+        (input)="input.style.height = 'auto'; input.style.height = input.scrollHeight + 'px'"></textarea>
+      <button
+        (click)="sendMessage()"
+        [disabled]="isLoading() || !userInput().trim()"
+        class="px-4 py-2 bg-primary text-white rounded-md font-semibold hover:bg-primary-hover disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-primary focus:outline-none">
+        @if (isLoading()) {
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        } @else {
+          Send
+        }
+      </button>
+    </div>
+  </div>
+</div>
